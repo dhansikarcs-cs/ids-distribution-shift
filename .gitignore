@@ -1,0 +1,20 @@
+# dataset (large, public)
+*.csv
+*.arff
+
+# archives / build artifacts
+*.zip
+*.tar.gz
+*.log
+*.aux
+*.toc
+*.out
+*.dvi
+
+# python
+__pycache__/
+*.pyc
+
+# os / editor
+.DS_Store
+Thumbs.db

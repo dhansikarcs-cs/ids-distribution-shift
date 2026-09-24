@@ -1,0 +1,33 @@
+TITLE:
+Evaluating Machine Learning-Based Intrusion Detection Models Under Distribution Shift
+
+AUTHORS (arXiv author pull-down / "other"):
+Dhansika.R
+Affiliation: Independent Researcher
+Email: dhansika.r.cs@gmail.com
+ORCID: 0009-0005-5894-4578  (https://orcid.org/0009-0005-5894-4578)
+
+ABSTRACT:
+Machine learning-based network intrusion detection systems (NIDS) are widely deployed in cloud environments. The standard evaluation methodology trains a model on a labeled dataset, splits it randomly, and reports performance metrics assuming training and deployment data follow the same distribution, an assumption that frequently fails in real networks. We study four machine learning models (Logistic Regression, Random Forest, XGBoost, Multi-Layer Perceptron) under distribution shifts that reflect realistic deployment, compared with conventional random-split evaluation. Using the CICIDS2017 dataset, we design four evaluation scenarios including a joint session and attack-family distribution shift, attack-family leave-one-out, and synthetic feature perturbation, along with a matched-size control that isolates distribution shift from training set size and a single-class covariate-shift control that separates seen-class feature displacement from unseen-class generalization. Shift magnitude is quantified with per-feature Wasserstein distances; a threshold sweep tests whether recalibrating the decision threshold can recover collapsed F1. Our key finding is that models achieving near-perfect F1-scores (0.999+) under random splitting can suffer severe performance degradation under distribution shift, with Random Forest dropping from F1 = 0.9997 to F1 = 0.0000, while a matched-size control using the same number of training samples on same-distribution data yields F1 = 0.9992, providing strong evidence that the degradation is distributional rather than a data-scarcity effect. The failure modes differ by architecture: tree-based models collapse to predicting all traffic as benign, while linear and neural models retain partial detection capability. ROC-AUC can remain partially informative (0.819 for Random Forest) while F1 collapses, indicating retained discriminative signal despite broken operational behavior. A threshold sweep confirms this signal is partially recoverable, at far-below-default thresholds with a measurable false-alarm cost.
+
+COMMENTS:
+About 8,000 words; 9 tables; 8 figures. Controlled experiments on the Friday subset of CICIDS2017 (Sharafaldin et al., ICISSP 2018). Generative-AI assistance is disclosed in the manuscript's Declarations section. Code and data available from the author on request. Matched-size and covariate-shift controls isolate distribution shift from data-scarcity confounds.
+
+SUGGESTED CATEGORIES (primary first):
+cs.CR (Cryptography and Security)  -- primary (your current default is cs.ET; change it)
+cs.LG (Machine Learning)           -- likely cross-list candidate
+
+UPLOAD CONTENTS (attach to the submission):
+main.tex            (PDFLaTeX source)
+fig1.png .. fig8.png (your 8 figures)
+(no .aux / .log / .pdf / .zip files)
+
+PREVIEW BEFORE SUBMITTING:
+1. go to https://www.overleaf.com -> New Project -> Blank (or upload zipped main.tex+fig1-8.png)
+2. confirm it compiles in one pass ("LaTeX" / "PDFLaTeX")
+3. then upload main.tex + fig1.png..fig8.png to arXiv's Start New Submission
+
+TIPS:
+- The title/author/date are filled by arXiv from your account, the PDF header comes from main.tex
+- Endorsement may be required for first submission in cs.CR/cs.LG; request it if asked (see arXiv "Endorsement" help)
+- arXiv abstracts strip math; keep plain text (this file already avoids TeX math)
