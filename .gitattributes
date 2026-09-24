@@ -1,0 +1,13 @@
+# binary files must not be line-normalized
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.zip binary
+*.7z binary
+*.json text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.tex text eol=lf
+*.txt text eol=lf
+*.csv text eol=lf
