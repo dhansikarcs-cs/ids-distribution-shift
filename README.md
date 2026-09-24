@@ -10,7 +10,7 @@ Controlled experiments on the CICIDS2017 dataset showing that conventional rando
 
 ## Timeline
 
-The project was carried out from **July 2026 to September 2026**. This repository was assembled and published in **September 2026, after the manuscript was completed**: all experiment scripts, outputs, results, and figures were produced and recorded during the evaluation period (July-September 2026) and are archived here as the reproducible record. The paper source and the arXiv-formatted LaTeX bundle are included under `paper/` and `arxiv/`.
+The project was carried out from **July 2026 to September 2026**. The manuscript is currently an **unpublished preprint** (not yet submitted or peer-reviewed). This repository was assembled and made public in **September 2026, after the manuscript was completed**: all experiment scripts, outputs, results, and figures were produced and recorded during the evaluation period (July-September 2026) and are archived here as the reproducible record. The paper source and the arXiv-formatted LaTeX bundle are included under `paper/` and `arxiv/`.
 
 ## Repository layout
 
