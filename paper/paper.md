@@ -12,9 +12,9 @@
 
 ## Abstract
 
-Machine learning-based network intrusion detection systems (NIDS) are widely deployed in cloud environments. The standard evaluation methodology trains a model on a labeled dataset, splits it randomly, and reports performance metrics assuming training and deployment data follow the same distribution, an assumption that frequently fails in real networks. We study four machine learning models (Logistic Regression, Random Forest, XGBoost, Multi-Layer Perceptron) under distribution shifts that reflect realistic deployment, compared with conventional random-split evaluation. Using the CICIDS2017 dataset, we design four evaluation scenarios: conventional random split, a joint session and attack-family distribution shift, attack-family leave-one-out, and synthetic feature perturbation, along with a matched-size control that isolates distribution shift from training set size, and a single-class covariate-shift control that separates seen-class feature displacement from unseen-class generalization.
+Machine learning-based network intrusion detection systems (NIDS) are widely deployed in cloud environments. The standard evaluation methodology trains a model on a labeled dataset, splits it randomly, and reports performance metrics assuming training and deployment data follow the same distribution, an assumption that frequently fails in real networks. I study four machine learning models (Logistic Regression, Random Forest, XGBoost, Multi-Layer Perceptron) under distribution shifts that reflect realistic deployment, compared with conventional random-split evaluation. Using the CICIDS2017 dataset, I design four evaluation scenarios: conventional random split, a joint session and attack-family distribution shift, attack-family leave-one-out, and synthetic feature perturbation, along with a matched-size control that isolates distribution shift from training set size, and a single-class covariate-shift control that separates seen-class feature displacement from unseen-class generalization.
 
-Shift magnitude is quantified with per-feature Wasserstein distances; a threshold sweep tests whether recalibrating the decision threshold can recover collapsed F1. Our key finding is that models achieving near-perfect F1-scores (0.999+) under random splitting can suffer severe performance degradation under distribution shift, with Random Forest dropping from F1 = 0.9997 to F1 = 0.0000, while a matched-size control using the same number of training samples on same-distribution data yields F1 = 0.9992, providing strong evidence that the degradation is distributional rather than a data-scarcity effect. The failure modes differ by architecture: tree-based models collapse to predicting all traffic as benign, while linear and neural models retain partial detection capability. ROC-AUC can remain partially informative (0.819 for Random Forest) while F1 collapses, indicating retained discriminative signal despite broken operational behavior. A threshold sweep confirms that much of the lost F1 can be recovered (Random Forest: 0.0000 to 0.826), but only at far-below-default thresholds that carry a substantial false-alarm burden.
+Shift magnitude is quantified with per-feature Wasserstein distances; a threshold sweep tests whether recalibrating the decision threshold can recover collapsed F1. my key finding is that models achieving near-perfect F1-scores (0.999+) under random splitting can suffer severe performance degradation under distribution shift, with Random Forest dropping from F1 = 0.9997 to F1 = 0.0000, while a matched-size control using the same number of training samples on same-distribution data yields F1 = 0.9992, providing strong evidence that the degradation is distributional rather than a data-scarcity effect. The failure modes differ by architecture: tree-based models collapse to predicting all traffic as benign, while linear and neural models retain partial detection capability. ROC-AUC can remain partially informative (0.819 for Random Forest) while F1 collapses, indicating retained discriminative signal despite broken operational behavior. A threshold sweep confirms that much of the lost F1 can be recovered (Random Forest: 0.0000 to 0.826), but only at far-below-default thresholds that carry a substantial false-alarm burden.
 
 **Keywords:** intrusion detection, distribution shift, robustness evaluation, machine learning, cybersecurity, concept drift
 
@@ -94,19 +94,19 @@ Shyaa et al. (2024) surveyed 71 studies of concept drift in intrusion detection,
 
 ### 4.3 Temporal Evaluation of IDS
 
-Intrusion detection is inherently a time-series problem: models trained on past traffic must classify future traffic, whose statistical properties evolve. Ahmad et al. (2021) built an adaptive system that detects concept drift and triggers retraining when performance degrades, but it requires continuous labeled data, which is a heavy operational constraint because ground-truth labels are often delayed or unavailable in production. Nibouchia et al. (2024) systematically reviewed temporal handling in IDS publications and found that many studies ignore temporal ordering, potentially inflating performance estimates. Our work complements these studies with controlled experiments that quantify degradation under session-based shift and isolate its cause through matched-size controls.
+Intrusion detection is inherently a time-series problem: models trained on past traffic must classify future traffic, whose statistical properties evolve. Ahmad et al. (2021) built an adaptive system that detects concept drift and triggers retraining when performance degrades, but it requires continuous labeled data, which is a heavy operational constraint because ground-truth labels are often delayed or unavailable in production. Nibouchia et al. (2024) systematically reviewed temporal handling in IDS publications and found that many studies ignore temporal ordering, potentially inflating performance estimates. my work complements these studies with controlled experiments that quantify degradation under session-based shift and isolate its cause through matched-size controls.
 
 ### 4.4 Adversarial Robustness of NIDS
 
-Adversarial robustness concerns deliberate modification of traffic to evade detection. Our study examines natural distribution shift (session differences, attack-family variation) rather than adversarial manipulation, but the broader robustness framing is relevant. Coronges et al. (2024) surveyed over 200 papers and identified evasion, poisoning, and model extraction as the primary threat vectors, noting that robustness against natural shifts and robustness against adversarial attacks are complementary aspects of reliable detection under conditions that differ from training.
+Adversarial robustness concerns deliberate modification of traffic to evade detection. my study examines natural distribution shift (session differences, attack-family variation) rather than adversarial manipulation, but the broader robustness framing is relevant. Coronges et al. (2024) surveyed over 200 papers and identified evasion, poisoning, and model extraction as the primary threat vectors, noting that robustness against natural shifts and robustness against adversarial attacks are complementary aspects of reliable detection under conditions that differ from training.
 
 ### 4.5 Concept Drift Adaptation
 
-Drift adaptation methods include sliding windows, ensembles, and online learning. Sadhnani et al. (2024) applied Explainable AI to identify when and why model behavior changes, finding that different attack types drift at different rates, which argues against a single global retraining schedule. Akinola et al. (2022) developed a feedback mechanism that updates models in real time based on analyst decisions, addressing the shortage of ground-truth labels in operations. These approaches focus on detecting and responding to shift; we evaluate the degradation that occurs when shift is not handled at all.
+Drift adaptation methods include sliding windows, ensembles, and online learning. Sadhnani et al. (2024) applied Explainable AI to identify when and why model behavior changes, finding that different attack types drift at different rates, which argues against a single global retraining schedule. Akinola et al. (2022) developed a feedback mechanism that updates models in real time based on analyst decisions, addressing the shortage of ground-truth labels in operations. These approaches focus on detecting and responding to shift; I evaluate the degradation that occurs when shift is not handled at all.
 
 ### 4.6 Summary
 
-This paper contributes a controlled experimental framework that isolates the effects of distribution shift, compares the robustness of several model architectures under identical conditions, and connects quantitative degradation patterns to practical security implications. Unlike prior work that evaluates a single shift type or fails to control for training set size, our approach uses matched-size controls with zero train/test overlap to establish what actually causes the observed degradation.
+This paper contributes a controlled experimental framework that isolates the effects of distribution shift, compares the robustness of several model architectures under identical conditions, and connects quantitative degradation patterns to practical security implications. Unlike prior work that evaluates a single shift type or fails to control for training set size, my approach uses matched-size controls with zero train/test overlap to establish what actually causes the observed degradation.
 
 ---
 
@@ -114,7 +114,7 @@ This paper contributes a controlled experimental framework that isolates the eff
 
 ### 5.1 Dataset
 
-We use the Friday subset of CICIDS2017 (Sharafaldin et al., 2018), a widely used public benchmark for intrusion detection research. Preprocessing first replaces infinite values with NaN and drops rows containing NaN or Inf: 527 rows (0.07% of the raw 703,245) were removed, and no imputation was applied. Non-numeric columns are dropped, leaving 78 numeric features. The result is 318,237 rows across 4 classes:
+I use the Friday subset of CICIDS2017 (Sharafaldin et al., 2018), a widely used public benchmark for intrusion detection research. Preprocessing first replaces infinite values with NaN and drops rows containing NaN or Inf: 527 rows (0.07% of the raw 703,245) were removed, and no imputation was applied. Non-numeric columns are dropped, leaving 78 numeric features. The result is 318,237 rows across 4 classes:
 
 | Class | Count | Percentage |
 |-------|------:|----------:|
@@ -127,11 +127,11 @@ Features are flow-level statistics (Flow Duration, Total Fwd/Backward Packets, p
 
 ### 5.2 Prediction Task
 
-We primarily evaluate binary classification: BENIGN (0) vs. ATTACK (1). The 4-class problem is evaluated as a supplementary analysis.
+I primarily evaluate binary classification: BENIGN (0) vs. ATTACK (1). The 4-class problem is evaluated as a supplementary analysis.
 
 ### 5.3 Models
 
-We evaluate four models, each representing a different algorithmic paradigm:
+I evaluate four models, each representing a different algorithmic paradigm:
 
 - **Logistic Regression (LR):** Linear classifier with L2 regularization; invariant to feature scaling but assumes linear decision boundaries
 - **Random Forest (RF):** Ensemble of 80 decision trees (max_depth=15); axis-aligned splits make it invariant to monotonic feature transformations
@@ -140,7 +140,7 @@ We evaluate four models, each representing a different algorithmic paradigm:
 
 All models use fixed hyperparameters with `random_state=42` for reproducibility.
 
-**Focus on traditional machine learning.** We deliberately confined the study to these four models rather than deep architectures. The motivating deployment context is a throughput-constrained cloud IDS: Random Forest, gradient-boosted trees, and logistic regression remain common in production because they run at near-line-rate inference on commodity CPUs with modest memory and power requirements, while deep models typically need GPU acceleration and accept higher latency. The inductive-bias differences also matter for the observed failures: Random Forest's axis-aligned splits cannot extrapolate beyond the range of feature values seen in training (consistent with its complete collapse to predicting all traffic as benign when test features fall outside the training envelope), while linear and neural models learn continuous, magnitude-sensitive representations that degrade more gracefully. Comparing deep architectures against these models is outside the scope of this study and left as future work.
+**Focus on traditional machine learning.** I deliberately confined the study to these four models rather than deep architectures. The motivating deployment context is a throughput-constrained cloud IDS: Random Forest, gradient-boosted trees, and logistic regression remain common in production because they run at near-line-rate inference on commodity CPUs with modest memory and power requirements, while deep models typically need GPU acceleration and accept higher latency. The inductive-bias differences also matter for the observed failures: Random Forest's axis-aligned splits cannot extrapolate beyond the range of feature values seen in training (consistent with its complete collapse to predicting all traffic as benign when test features fall outside the training envelope), while linear and neural models learn continuous, magnitude-sensitive representations that degrade more gracefully. Comparing deep architectures against these models is outside the scope of this study and left as future work.
 
 ---
 
@@ -154,19 +154,19 @@ All models use fixed hyperparameters with `random_state=42` for reproducibility.
 
 **Experiment C: Attack-Family Leave-One-Out.** For each attack type (Bot, DDoS, PortScan), the model trains on all other traffic and tests on the held-out attack type plus a comparable number of unseen benign samples. To prevent leakage, benign samples used in the test set are explicitly excluded from training. This directly evaluates how well models generalize to entirely unseen attack types, a critical capability for deployment where the training set inevitably misses some attack variants.
 
-**Experiment D: Synthetic Feature Perturbation.** Using the same random split as Experiment A, we perturb the test set features synthetically: Flow Duration is multiplied by random factors drawn uniformly from 2.0 to 5.0, and packet count features (Total Fwd Packets, Total Backward Packets) are scaled by Gaussian noise (mean 1.5, std 0.5), clipped to [-10^6, 10^6]. This tests invariance to feature-level changes from infrastructure modification, sensor recalibration, or changes in flow measurement tools.
+**Experiment D: Synthetic Feature Perturbation.** Using the same random split as Experiment A, I perturb the test set features synthetically: Flow Duration is multiplied by random factors drawn uniformly from 2.0 to 5.0, and packet count features (Total Fwd Packets, Total Backward Packets) are scaled by Gaussian noise (mean 1.5, std 0.5), clipped to [-10^6, 10^6]. This tests invariance to feature-level changes from infrastructure modification, sensor recalibration, or changes in flow measurement tools.
 
 ### 6.2 Control Experiments
 
 The key methodological contribution is the matched-size control, which isolates distribution shift from training set size.
 
-**Experiment B2: Matched-Size Control.** We subsample the random training pool from Experiment A down to 13,736 samples (matching B's training set size) and test on the same held-out random split from Experiment A. This control has: (1) the same training set size as B, (2) the same test set, (3) zero train/test overlap, and (4) training data from the same distribution as the test set. Comparing B with B2 isolates the effect of distribution shift while controlling for training set size.
+**Experiment B2: Matched-Size Control.** I subsample the random training pool from Experiment A down to 13,736 samples (matching B's training set size) and test on the same held-out random split from Experiment A. This control has: (1) the same training set size as B, (2) the same test set, (3) zero train/test overlap, and (4) training data from the same distribution as the test set. Comparing B with B2 isolates the effect of distribution shift while controlling for training set size.
 
-**Experiment B4: Single-Class Covariate-Shift Control.** Experiment B conflates covariate shift with unseen-class generalization; B4 isolates the covariate-shift part. We take only DDoS and BENIGN traffic (157,477 samples), split it 80/20 stratified, and train all models on the training portion (so **DDoS is present in the training set**) testing on the held-out portion. In B4a (no-shift control) the held-out test is used unmodified. In B4b (covariate shift) the same perturbation design as Experiment D is applied to the test features (Flow Duration multiplied by 2--5, packet counts scaled by Gaussian noise centered at 1.5); benign samples are unchanged. Because the attack class is present in training, any degradation between B4a and B4b is attributable to feature displacement (covariate shift) in isolation from unseen-class generalization; the contrast between B4b and B quantifies how much of B's collapse comes from features outside the training envelope versus entirely novel attack families.
+**Experiment B4: Single-Class Covariate-Shift Control.** Experiment B conflates covariate shift with unseen-class generalization; B4 isolates the covariate-shift part. I take only DDoS and BENIGN traffic (157,477 samples), split it 80/20 stratified, and train all models on the training portion (so **DDoS is present in the training set**) testing on the held-out portion. In B4a (no-shift control) the held-out test is used unmodified. In B4b (covariate shift) the same perturbation design as Experiment D is applied to the test features (Flow Duration multiplied by 2--5, packet counts scaled by Gaussian noise centered at 1.5); benign samples are unchanged. Because the attack class is present in training, any degradation between B4a and B4b is attributable to feature displacement (covariate shift) in isolation from unseen-class generalization; the contrast between B4b and B quantifies how much of B's collapse comes from features outside the training envelope versus entirely novel attack families.
 
 ### 6.3 Evaluation Metrics
 
-We report accuracy, precision, recall, F1-score, FPR, and ROC-AUC for binary classification. For multiclass, we report weighted averages.
+I report accuracy, precision, recall, F1-score, FPR, and ROC-AUC for binary classification. For multiclass, I report weighted averages.
 
 **Precision:** the proportion of predicted attacks that are actually attacks.
 
@@ -176,11 +176,11 @@ We report accuracy, precision, recall, F1-score, FPR, and ROC-AUC for binary cla
 
 ### 6.4 Quantifying Shift Magnitude
 
-To ground the shifts mathematically, we measure how far the training and test feature distributions drifted using the one-dimensional Wasserstein distance (Earth Mover's Distance). For each feature, we compute W1(f) = W(P_train(f), P_test(f)) on a random subsample of 25,000 points per side, then normalize by the pooled standard deviation of the two distributions so distances are dimensionless and comparable across features. We report the mean normalized Wasserstein distance across all features as a single shift-magnitude index, plus the top shifted features. We compute this for the B shift (morning-session training vs. afternoon-session test features), the D shift (unmodified vs. perturbed test features), and the B4 shift (unmodified vs. perturbed DDoS test features), and relate it to the observed F1 drop.
+To ground the shifts mathematically, I measure how far the training and test feature distributions drifted using the one-dimensional Wasserstein distance (Earth Mover's Distance). For each feature, I compute W1(f) = W(P_train(f), P_test(f)) on a random subsample of 25,000 points per side, then normalize by the pooled standard deviation of the two distributions so distances are dimensionless and comparable across features. I report the mean normalized Wasserstein distance across all features as a single shift-magnitude index, plus the top shifted features. I compute this for the B shift (morning-session training vs. afternoon-session test features), the D shift (unmodified vs. perturbed test features), and the B4 shift (unmodified vs. perturbed DDoS test features), and relate it to the observed F1 drop.
 
 ### 6.5 Threshold Sweep
 
-To test whether the retained ROC-AUC signal can be turned back into usable classification, we sweep the decision threshold on the Experiment B test set from 0.001 to 1.0 in steps of 0.001 for each model, computing F1, precision, recall, and FPR at every threshold. We report F1 at the default threshold (0.50) versus the best non-degenerate operating point, defined as the maximum F1 over thresholds strictly below 0.50. Because the B test set is 96.1% attack, we also report FPR and the fraction of samples flagged as attack at each operating point, so the false-alarm cost of aggressive thresholds is explicit.
+To test whether the retained ROC-AUC signal can be turned back into usable classification, I sweep the decision threshold on the Experiment B test set from 0.001 to 1.0 in steps of 0.001 for each model, computing F1, precision, recall, and FPR at every threshold. I report F1 at the default threshold (0.50) versus the best non-degenerate operating point, defined as the maximum F1 over thresholds strictly below 0.50. Because the B test set is 96.1% attack, I also report FPR and the fraction of samples flagged as attack at each operating point, so the false-alarm cost of aggressive thresholds is explicit.
 
 ### 6.6 Experimental Procedure
 
@@ -300,7 +300,7 @@ The contrast is informative. Tree models were highly vulnerable to session/attac
 
 ### 7.7 Shift Magnitude Quantification (Wasserstein Distances)
 
-The preceding experiments describe shifts qualitatively; Table 7 quantifies them. For each shift we report the mean normalized one-dimensional Wasserstein distance between training and test features (a random subsample of 25,000 points per side, per-feature distance divided by the pooled standard deviation).
+The preceding experiments describe shifts qualitatively; Table 7 quantifies them. For each shift I report the mean normalized one-dimensional Wasserstein distance between training and test features (a random subsample of 25,000 points per side, per-feature distance divided by the pooled standard deviation).
 
 | Shift | Mean W1 (norm.) | Top shifted features | Max F1 drop |
 |-------|----------------:|----------------------|------------:|
@@ -370,7 +370,7 @@ From an operational standpoint, the tree-based failure mode is strictly worse: a
 
 ### 8.3 Implications for Cloud Deployment
 
-Deploying ML-based intrusion detection in clouds adds complexity. In centralized architectures where traffic from multiple services is fed into a single model, the distribution shift problem is amplified. Our finding that tree-based models collapse under even a single session-based shift suggests that any model expected to generalize across diverse traffic types is especially at risk.
+Deploying ML-based intrusion detection in clouds adds complexity. In centralized architectures where traffic from multiple services is fed into a single model, the distribution shift problem is amplified. my finding that tree-based models collapse under even a single session-based shift suggests that any model expected to generalize across diverse traffic types is especially at risk.
 
 **Inference latency.** Inference times differ by an order of magnitude (LR 0.0001 ms/sample, MLP 0.0006, RF 0.0014). At cloud scale, where millions of flow records may be classified per minute, these differences are operationally significant. But the latency advantage of LR is meaningless if the model fails to detect attacks under shift, so the speed-robustness trade-off should be informed by distribution-aware evaluation.
 
@@ -382,17 +382,17 @@ Deploying ML-based intrusion detection in clouds adds complexity. In centralized
 
 ## 9. Limitations
 
-**Dataset scope.** We use only the Friday subset of CICIDS2017 (BENIGN, Bot, DDoS, PortScan). The full dataset includes additional attack categories (Brute Force, Heartbleed, Web Attacks, Infiltration) spread across Monday through Friday, which may produce different shift patterns, and these findings may not generalize to datasets with different attack types or network configurations. Future work should replicate this analysis on UNSW-NB15, CICIDS2018, and real production traffic.
+**Dataset scope.** I use only the Friday subset of CICIDS2017 (BENIGN, Bot, DDoS, PortScan). The full dataset includes additional attack categories (Brute Force, Heartbleed, Web Attacks, Infiltration) spread across Monday through Friday, which may produce different shift patterns, and these findings may not generalize to datasets with different attack types or network configurations. Future work should replicate this analysis on UNSW-NB15, CICIDS2018, and real production traffic.
 
-**Session-shift construction.** In Experiment B, the session-based split partitions by attack type (Bot = morning, DDoS/PortScan = afternoon). This approximates but does not perfectly replicate a pure timestamp-level temporal split, because preprocessing concatenates rows by class, partially destroying the original temporal ordering. We therefore label it *session and attack-family shift* rather than *temporal shift*.
+**Session-shift construction.** In Experiment B, the session-based split partitions by attack type (Bot = morning, DDoS/PortScan = afternoon). This approximates but does not perfectly replicate a pure timestamp-level temporal split, because preprocessing concatenates rows by class, partially destroying the original temporal ordering. I therefore label it *session and attack-family shift* rather than *temporal shift*.
 
 **Train-test size imbalance.** The session split produces substantially different training and test set sizes (13,736 vs. 298,609). The B2 control confirms that distribution shift, not train size, is the primary cause of degradation, but the imbalance also shifts class proportions (training is 85.7% benign; test is 3.9% benign), which is an additional variable in the design.
 
-**Model configurations.** We evaluate four architectures with fixed, untuned hyperparameters; other configurations might have different robustness profiles. However, the complete collapse of RF and XGB under session shift suggests the main finding is robust to moderate hyperparameter variation. We do not evaluate recurrent, attention-based, or graph-neural architectures, which may behave differently; the ML focus here is deliberate (Section 5.3).
+**Model configurations.** I evaluate four architectures with fixed, untuned hyperparameters; other configurations might have different robustness profiles. However, the complete collapse of RF and XGB under session shift suggests the main finding is robust to moderate hyperparameter variation. I do not evaluate recurrent, attention-based, or graph-neural architectures, which may behave differently; the ML focus here is deliberate (Section 5.3).
 
 **Feature shift design.** The synthetic perturbation in Experiment D is limited: it multiplies flow-level magnitudes by positive factors while preserving feature correlations. Tree models showed little degradation under this transformation, but that does not establish robustness to joint-distribution, correlation, feature-availability, or sensor changes, any of which could reorder samples across tree splits. Joint-distribution shifts remain untested.
 
-**Binary classification focus.** While we report multi-class results, the primary analysis uses binary classification (BENIGN vs. ATTACK). Distribution shift may affect multi-class performance differently, especially class-specific detection.
+**Binary classification focus.** While I report multi-class results, the primary analysis uses binary classification (BENIGN vs. ATTACK). Distribution shift may affect multi-class performance differently, especially class-specific detection.
 
 ---
 
@@ -406,7 +406,7 @@ These findings have implications for both research methodology and operational d
 
 Several directions for future work emerge. First, the framework should be replicated on additional datasets (UNSW-NB15, CICIDS2018) and architectures (recurrent networks, transformers, and calibrated variants such as Platt-scaled or isotonic-regression classifiers). Second, distribution shift detection methods that alert operators when operating conditions diverge from training conditions would complement robustness evaluation, with the ROC-AUC-versus-F1 gap identified here as a candidate early-warning signal. Third, domain adaptation and continual learning approaches that address shift during deployment could offer more robust alternatives to static deployment. Fourth, adaptive threshold strategies informed by the sweep results (including operating-point selection that accounts for false-alarm cost in benign-dominated traffic) could operationalize the ROC-AUC finding.
 
-The broader lesson is that evaluation methodology itself shapes the conclusions we draw about model capability: a model evaluated under conditions that do not match deployment is effectively a different model. As ML-based intrusion detection matures, standardized robustness evaluation protocols (analogous to adversarial robustness benchmarks in computer vision) become increasingly important for closing the gap between benchmark performance and operational security. The framework presented here, combining distribution-shift evaluation with matched-size and covariate-shift controls, Wasserstein quantification, and failure mode analysis, provides a template for such protocols.
+The broader lesson is that evaluation methodology itself shapes the conclusions I draw about model capability: a model evaluated under conditions that do not match deployment is effectively a different model. As ML-based intrusion detection matures, standardized robustness evaluation protocols (analogous to adversarial robustness benchmarks in computer vision) become increasingly important for closing the gap between benchmark performance and operational security. The framework presented here, combining distribution-shift evaluation with matched-size and covariate-shift controls, Wasserstein quantification, and failure mode analysis, provides a template for such protocols.
 
 ---
 
