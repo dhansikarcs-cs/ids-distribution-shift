@@ -47,6 +47,8 @@ except ImportError:
 
 OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
 DATA_PATH = r'C:\Users\dhans\Desktop\research\tech\cicids2017_friday.csv'
+# NOTE: full run is ~90 min on my laptop (RF + XGB on the 50K pool). if you
+# only need the numbers, read results/supplementary_results.json instead.
 
 # ============================================================
 # 0. IDENTICAL PREPROCESSING TO experiments_v2.py
@@ -139,6 +141,8 @@ def threshold_sweep(y_true, proba):
     n_pos = cum_attack[-1]
     n = len(ys)
     thresholds = np.arange(0.001, 1.0, 0.001)
+    # first version looped per threshold and took forever - this is a single
+    # searchsorted over sorted probabilities, instant by comparison
     # k = number of positives predicted for each threshold
     idx = np.searchsorted(-ps, -thresholds, side='right')
     idx = np.clip(idx, 1, n)
@@ -187,9 +191,11 @@ for name, model in get_models().items():
     }
     print(f"  {name}: F1={b4a[name]['f1']:.4f} AUC={b4a[name]['roc_auc']:.4f}")
 
-# B4b: covariate shift — same attack type, features perturbed on test DDoS
+# B4b: covariate shift - same attack type, features perturbed on test DDoS
 np.random.seed(42)
 X_te_b4_shift = X_te_b4.copy()
+# make the test DDoS look different: 2-5x longer flows, ~1.5x more packets.
+# train features stay original, so only the feature distribution moves.
 dur_col = feature_cols.index('Flow Duration') if 'Flow Duration' in feature_cols else 1
 shift_factors = np.random.uniform(2.0, 5.0, size=len(X_te_b4_shift))
 X_te_b4_shift[:, dur_col] = X_te_b4_shift[:, dur_col] * shift_factors
