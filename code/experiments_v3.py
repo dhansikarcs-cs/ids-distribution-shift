@@ -9,13 +9,13 @@ SUPPLEMENTARY EXPERIMENTS for reviewer z-round z (journal readiness).
 Replicates the exact preprocessing of experiments_v2.py so pools align.
 """
 
-# --- personal note (July-Aug 2026) ---
-# This file grew organically: B4 came after B2, and the threshold sweep came
-# after I saw Random Forest still had ROC-AUC 0.81 while its F1 sat at exactly
-# zero. That gap bugged me until I swept the threshold - hence experiments_v4.
-# The Wasserstein numbers here also answer the obvious reviewer question,
-# "how big is the shift, really?" If you re-run this, the pools MUST match
-# experiments_v2.py, otherwise B4 stops being a control and becomes nothing.
+# --- my review notes (July-Aug 2026) ---
+# This file is me going back over what the AI scaffold built in v2. What
+# caught me: RF still had ROC-AUC 0.81 on the shifted test while its F1 was
+# literally 0.0000 - so I added the threshold sweep and the B4 single-class
+# control (in this file) to check it was the shift doing that, not the model.
+# If re-run, pools must be built exactly like experiments_v2.py, or B4 stops
+# being a control. the committed JSON in results/ is the source of truth.
 
 import pandas as pd
 import numpy as np
@@ -47,8 +47,8 @@ except ImportError:
 
 OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
 DATA_PATH = r'C:\Users\dhans\Desktop\research\tech\cicids2017_friday.csv'
-# NOTE: full run is ~90 min on my laptop (RF + XGB on the 50K pool). if you
-# only need the numbers, read results/supplementary_results.json instead.
+# NOTE: ~90 min for a full run; the committed JSON already matches this file.
+# re-run only if you changed something, and read the JSON otherwise.
 
 # ============================================================
 # 0. IDENTICAL PREPROCESSING TO experiments_v2.py
@@ -192,8 +192,8 @@ for name, model in get_models().items():
 # B4b: covariate shift - same attack type, features perturbed on test DDoS
 np.random.seed(42)
 X_te_b4_shift = X_te_b4.copy()
-# make the test DDoS look different: 2-5x longer flows, ~1.5x more packets.
-# train features stay original, so only the feature distribution moves.
+# here I perturb the test DDoS: 2-5x longer flows, ~1.5x more packets.
+# train stays untouched, so it's ONLY the feature distribution that moves.
 dur_col = feature_cols.index('Flow Duration') if 'Flow Duration' in feature_cols else 1
 shift_factors = np.random.uniform(2.0, 5.0, size=len(X_te_b4_shift))
 X_te_b4_shift[:, dur_col] = X_te_b4_shift[:, dur_col] * shift_factors

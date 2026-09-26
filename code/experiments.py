@@ -35,9 +35,8 @@ OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
 os.makedirs(OUT_DIR, exist_ok=True)
 
 DATA_PATH = r'C:\Users\dhans\Desktop\research\tech\cicids2017_friday.csv'
-# NOTE: point this at the CLEANED Friday sheet (save_data.py), not the raw
-# download. the raw csv is a few million rows with malformed lines and the
-# whole paper's numbers are tied to the cleaned + subsampled version.
+# path was wrong for days - the AI scaffold pointed at the raw download and
+# every number came out off. USE the cleaned sheet from save_data.py only.
 
 # ============================================================
 # 1. DATA LOADING & PREPROCESSING
@@ -59,7 +58,8 @@ df.dropna(inplace=True)
 print(f"Dropped {before - len(df)} rows with NaN/Inf. Remaining: {len(df):,}")
 
 # Drop non-numeric columns except Label
-# (timestamps and a few hex-text columns read as strings - they can't go in)
+# (timestamps + hex-text cells read as strings; dropping them is what leaves
+# the 78 numeric features the paper reports - checked)
 drop_cols = []
 for c in df.columns:
     if c != label_col and df[c].dtype == 'object':
@@ -96,8 +96,9 @@ X = df[feature_cols].values.astype(np.float32)
 y_bin = df['binary_label'].values
 y_multi = df['multi_label'].values
 
-# Masks for temporal split - morning is Bot + some Benign, afternoon is
-# DDoS + PortScan + the rest. the model trains on one and tests on the other.
+# this is THE experiment: train = morning traffic, test = afternoon traffic.
+# the classes in test (DDoS, PortScan) never appeared in the train session,
+# and vice versa. don't tighten this mask without re-running verify_numbers.
 is_ddos = (df[label_col] == 'DDoS').values
 is_portscan = (df[label_col] == 'PortScan').values
 is_bot = (df[label_col] == 'Bot').values
@@ -129,6 +130,9 @@ def get_models():
         ),
     }
 
+# skeleton came from AI with absurd params (300 trees, 1k iters). cut them
+# to 80 trees / depth 15 / 50 iters - runtime went from hours to ~6 min and
+# the results held. don't touch.
 print("Models: LR, RF, XGB, MLP")
 
 # ============================================================
