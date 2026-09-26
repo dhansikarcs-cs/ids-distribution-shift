@@ -141,8 +141,6 @@ def threshold_sweep(y_true, proba):
     n_pos = cum_attack[-1]
     n = len(ys)
     thresholds = np.arange(0.001, 1.0, 0.001)
-    # first version looped per threshold and took forever - this is a single
-    # searchsorted over sorted probabilities, instant by comparison
     # k = number of positives predicted for each threshold
     idx = np.searchsorted(-ps, -thresholds, side='right')
     idx = np.clip(idx, 1, n)
