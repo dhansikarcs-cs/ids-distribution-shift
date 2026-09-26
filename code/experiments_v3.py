@@ -9,6 +9,14 @@ SUPPLEMENTARY EXPERIMENTS for reviewer z-round z (journal readiness).
 Replicates the exact preprocessing of experiments_v2.py so pools align.
 """
 
+# --- personal note (July-Aug 2026) ---
+# This file grew organically: B4 came after B2, and the threshold sweep came
+# after I saw Random Forest still had ROC-AUC 0.81 while its F1 sat at exactly
+# zero. That gap bugged me until I swept the threshold - hence experiments_v4.
+# The Wasserstein numbers here also answer the obvious reviewer question,
+# "how big is the shift, really?" If you re-run this, the pools MUST match
+# experiments_v2.py, otherwise B4 stops being a control and becomes nothing.
+
 import pandas as pd
 import numpy as np
 import time
