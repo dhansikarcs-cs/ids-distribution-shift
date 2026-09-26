@@ -4,6 +4,12 @@ Exports F1/FPR/precision/recall curves over the threshold range so the paper
 can honestly quantify how much detection is recoverable AND the false-alarm cost.
 """
 
+# --- personal note ---
+# Default decision thresholds assume P(attack) is not tiny. In this data it
+# kind of is, and that is the whole point: RF needs t=0.01 to be usable at all,
+# and even then you pay with false alarms. This sweep is the only experiment
+# where "fixing" the model means changing the goalpost instead of the model.
+
 import pandas as pd
 import numpy as np
 import time

@@ -1,4 +1,10 @@
 import json
+# --- personal note ---
+# Every single number in the paper has to trace back to this JSON. I got burned
+# once by quoting a metric from memory, so this script now re-derives all 155
+# numbers and asserts them against the logs. If it prints without error, the
+# paper and the code agree. (I run it before every single draft.)
+
 with open(r'C:\Users\dhans\Desktop\research\tech\results\all_results.json') as f:
     r = json.load(f)
 

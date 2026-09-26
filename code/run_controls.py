@@ -18,6 +18,13 @@ Combined 2x2:
   B3 (small train, same dist, same test size) = full control
 """
 
+# --- personal note (August 2026) ---
+# After Experiment B collapsed Random Forest to 0.0000, the obvious pushback
+# was "but you only trained it on 13K samples, that's why it failed." So I ran
+# B2: the same 13K samples, same distribution, zero overlap with the test set.
+# It came back at 0.9992. That run is the reason I trust this result - the
+# collapse really is about the shift, not about how little data I used.
+
 import pandas as pd
 import numpy as np
 import time
