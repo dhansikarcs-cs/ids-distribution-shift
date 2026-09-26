@@ -35,6 +35,9 @@ OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
 os.makedirs(OUT_DIR, exist_ok=True)
 
 DATA_PATH = r'C:\Users\dhans\Desktop\research\tech\cicids2017_friday.csv'
+# NOTE: point this at the CLEANED Friday sheet (save_data.py), not the raw
+# download. the raw csv is a few million rows with malformed lines and the
+# whole paper's numbers are tied to the cleaned + subsampled version.
 
 # ============================================================
 # 1. DATA LOADING & PREPROCESSING
@@ -56,6 +59,7 @@ df.dropna(inplace=True)
 print(f"Dropped {before - len(df)} rows with NaN/Inf. Remaining: {len(df):,}")
 
 # Drop non-numeric columns except Label
+# (timestamps and a few hex-text columns read as strings - they can't go in)
 drop_cols = []
 for c in df.columns:
     if c != label_col and df[c].dtype == 'object':
@@ -92,7 +96,8 @@ X = df[feature_cols].values.astype(np.float32)
 y_bin = df['binary_label'].values
 y_multi = df['multi_label'].values
 
-# Masks for temporal split
+# Masks for temporal split - morning is Bot + some Benign, afternoon is
+# DDoS + PortScan + the rest. the model trains on one and tests on the other.
 is_ddos = (df[label_col] == 'DDoS').values
 is_portscan = (df[label_col] == 'PortScan').values
 is_bot = (df[label_col] == 'Bot').values

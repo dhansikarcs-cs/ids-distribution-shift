@@ -78,7 +78,7 @@ print(f"Dataset: {len(df):,} rows, {len(feature_cols)} features")
 
 # ============ Recreate temporal test set (same seed) ============
 morning_mask = is_bot.copy()
-afternoon_mask = is_ddos | is_portscan
+afternoon_mask = is_ddos | is_portscan  # the test: DDoS + PortScan, unseen classes
 benign_idx = np.where(is_benign)[0]
 np.random.seed(42)
 n_benign_morning = min(int(0.4 * is_benign.sum()), 30000)
