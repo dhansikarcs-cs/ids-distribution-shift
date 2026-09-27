@@ -118,25 +118,25 @@ print(f"   No feature selection performed (all 78 features used)")
 
 # Q7: Why RF/XGB = 0.000 temporal F1
 print("\n7. WHY RF/XGB GET F1=0.000 IN TEMPORAL SPLIT")
-rf_temp_f1 = results['B_temporal_split']['RF']['f1']
-rf_temp_acc = results['B_temporal_split']['RF']['accuracy']
-rf_temp_prec = results['B_temporal_split']['RF']['precision']
-rf_temp_rec = results['B_temporal_split']['RF']['recall']
+rf_temp_f1 = results['B_session_shift']['RF']['f1']
+rf_temp_acc = results['B_session_shift']['RF']['accuracy']
+rf_temp_prec = results['B_session_shift']['RF']['precision']
+rf_temp_rec = results['B_session_shift']['RF']['recall']
 print(f"   RF temporal: F1={rf_temp_f1}, Acc={rf_temp_acc:.4f}, P={rf_temp_prec}, R={rf_temp_rec}")
 print(f"   This means RF predicted ALL test samples as BENIGN (class 0)")
 print(f"   When a binary classifier predicts all negatives: recall=0, precision=undefined->0, F1=0")
 print(f"   RF trained on Bot+Benign learned features specific to Bot traffic")
 print(f"   DDoS/PortScan patterns are sufficiently different that RF defaults to majority class")
 
-xgb_temp_f1 = results['B_temporal_split']['XGB']['f1']
-xgb_temp_prec = results['B_temporal_split']['XGB']['precision']
-xgb_temp_rec = results['B_temporal_split']['XGB']['recall']
+xgb_temp_f1 = results['B_session_shift']['XGB']['f1']
+xgb_temp_prec = results['B_session_shift']['XGB']['precision']
+xgb_temp_rec = results['B_session_shift']['XGB']['recall']
 print(f"   XGB: F1={xgb_temp_f1}, P={xgb_temp_prec:.4f}, R={xgb_temp_rec}")
 print(f"   XGB predicted 3 attack samples correctly (recall=0.0002) but almost everything as benign")
 
-lr_temp_f1 = results['B_temporal_split']['LR']['f1']
-lr_temp_prec = results['B_temporal_split']['LR']['precision']
-lr_temp_rec = results['B_temporal_split']['LR']['recall']
+lr_temp_f1 = results['B_session_shift']['LR']['f1']
+lr_temp_prec = results['B_session_shift']['LR']['precision']
+lr_temp_rec = results['B_session_shift']['LR']['recall']
 print(f"   LR: F1={lr_temp_f1:.4f}, P={lr_temp_prec:.4f}, R={lr_temp_rec:.4f}")
 print(f"   LR retains some ability: captures ~27% of attacks with 99.5% precision")
 

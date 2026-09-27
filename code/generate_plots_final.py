@@ -78,7 +78,7 @@ model_colors = {'LR': '#e74c3c', 'RF': '#3498db', 'XGB': '#2ecc71', 'MLP': '#9b5
 # ============================================================
 print("Generating fig1...")
 fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-exp_keys = ['A_random_split', 'B_temporal_split', 'B2_matched_size_control', 'D_no_shift_control']
+exp_keys = ['A_random_split', 'B_session_shift', 'B2_matched_size_control', 'D_no_shift_control']
 exp_labels = ['A: Random\nSplit', 'B: Temporal\nShift', 'B2: Matched\nSize Control', 'D: No Shift\n(Control)']
 
 for ax, metric in zip(axes, ['accuracy', 'f1', 'recall']):
@@ -104,7 +104,7 @@ print("  Saved")
 # ============================================================
 print("Generating fig2...")
 all_exp_labels = ['A: Random', 'B: Temporal', 'B2: Matched Size', 'B3: Same Dist', 'D: No Shift', 'D: Feature Shift']
-all_exp_keys = ['A_random_split', 'B_temporal_split', 'B2_matched_size_control', 'B3_same_dist_same_size', 'D_no_shift_control', 'D_feature_shift']
+all_exp_keys = ['A_random_split', 'B_session_shift', 'B2_matched_size_control', 'B3_same_dist_same_size', 'D_no_shift_control', 'D_feature_shift']
 
 heat_data = {}
 for model in model_colors:
@@ -138,7 +138,7 @@ width = 0.25
 
 scenarios = [
     ('A_random_split', 'Random Split (254K)', '#2ecc71'),
-    ('B_temporal_split', 'Temporal Shift (13K)', '#e74c3c'),
+    ('B_session_shift', 'Temporal Shift (13K)', '#e74c3c'),
     ('B2_matched_size_control', 'Matched Size (13K)', '#f39c12'),
 ]
 
@@ -169,7 +169,7 @@ baseline = {m: all_results['A_random_split'][m]['f1'] for m in model_colors}
 
 # Build (label, f1_key) pairs
 deg_pairs = [
-    ('B: Temporal\nShift', all_results.get('B_temporal_split', {})),
+    ('B: Temporal\nShift', all_results.get('B_session_shift', {})),
     ('B2: Matched\nSize', all_results.get('B2_matched_size_control', {})),
     ('D: Feature\nShift', all_results.get('D_feature_shift', {})),
 ]
@@ -344,7 +344,7 @@ metrics_to_radar = ['accuracy', 'f1', 'precision', 'recall']
 fig, axes = plt.subplots(1, 3, figsize=(18, 6))
 exp_configs = [
     ('A_random_split', 'A: Random Split'),
-    ('B_temporal_split', 'B: Temporal Shift'),
+    ('B_session_shift', 'B: Temporal Shift'),
     ('B2_matched_size_control', 'B2: Matched Size'),
 ]
 
