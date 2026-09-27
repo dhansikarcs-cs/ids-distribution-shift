@@ -10,7 +10,7 @@ Replicates the exact preprocessing of experiments_v2.py so pools align.
 """
 
 # --- my review notes (July-Aug 2026) ---
-# This file is me going back over what the AI scaffold built in v2. What
+# This file is me going back over the first draft of the v2 code. What
 # caught me: RF still had ROC-AUC 0.81 on the shifted test while its F1 was
 # literally 0.0000 - so I added the threshold sweep and the B4 single-class
 # control (in this file) to check it was the shift doing that, not the model.

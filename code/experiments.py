@@ -35,7 +35,7 @@ OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
 os.makedirs(OUT_DIR, exist_ok=True)
 
 DATA_PATH = r'C:\Users\dhans\Desktop\research\tech\cicids2017_friday.csv'
-# path was wrong for days - the AI scaffold pointed at the raw download and
+# path was wrong for days - my first draft pointed at the raw download and
 # every number came out off. USE the cleaned sheet from save_data.py only.
 
 # ============================================================

@@ -19,7 +19,7 @@ Combined 2x2:
 """
 
 # --- my review notes (August 2026) ---
-# The AI scaffold's controls were a random split vs another random split - it
+# My first-draft controls were a random split vs another random split - they
 # never answered "but you only trained on 13K samples". so I added B2 (13K
 # random samples, same distribution): F1 0.9992. that kills the sample-size
 # objection - the collapse in B is about the shift, not the data size.
