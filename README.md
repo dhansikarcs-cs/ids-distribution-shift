@@ -10,7 +10,7 @@ Controlled experiments on the CICIDS2017 dataset showing that conventional rando
 
 ## Timeline
 
-The project was carried out from **July 2026 to September 2026**. The manuscript is **unpublished** and is written to the *Young Scientists Journal* Author Guide style (not yet submitted or peer-reviewed). This repository was assembled and made public in **September 2026, after the manuscript was completed**: all experiment scripts, outputs, results, and figures were produced and recorded during the evaluation period (July-September 2026) and are archived here as the reproducible record. The journal-formatted paper source and PDF are under `paper/`; the arXiv-formatted LaTeX bundle is under `arxiv/`.
+The project was carried out from **July 2026 to September 2026**. The manuscript is **unpublished** (not yet submitted or peer-reviewed). This repository was assembled and made public in **September 2026, after the manuscript was completed**: all experiment scripts, outputs, results, and figures were produced and recorded during the evaluation period (July-September 2026) and are archived here as the reproducible record. The paper source and PDF are under `paper/`; the arXiv-formatted LaTeX bundle is under `arxiv/`.
 
 ## Repository layout
 
@@ -47,8 +47,7 @@ The dataset is **not committed** to this repository because it is large and publ
 
 - **Title:** Evaluating Machine Learning-Based Intrusion Detection Models Under Distribution Shift
 - **Author:** Dhansika.R (Independent Researcher)
-- **Format:** formatted to the *Young Scientists Journal* Author Guide: UK English, no first person or contractions, abbreviations defined, numbered Chicago citations in superscript brackets, and the required section order (Abstract, Introduction, Literature Review, Method, Results, Discussion and Analysis, Conclusion, Funding Statement and Acknowledgements, References, Biography).
-- **Biography:** the Biography section lists Dhansika.R as a 15-year-old independent researcher, followed by the 200 to 600 character third-person biography. An author photograph is still to be supplied; the YSJ Author Guide lists a photo as part of the Biography, so the PDF currently carries a placeholder.
+- **Biography:** the paper includes a Biography section with a 200 to 600 character third-person summary. The author photograph is currently shown as a placeholder.
 - **AI assistance disclosure:** Generative AI / AI-assisted tools (including the tool *opencode*) were used as guided assistance for scripting, figure generation, and prose editing; the author made all high-level experimental design decisions and reviewed/validated every reported result. Full disclosure is in the manuscript's Funding Statement and Acknowledgements section.
 
 ## License
