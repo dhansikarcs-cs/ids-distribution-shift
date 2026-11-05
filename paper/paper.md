@@ -449,9 +449,9 @@ The broader lesson is that evaluation methodology itself shapes the conclusions 
 
 **Name:** Dhansika.R
 
-**Age:** [to be confirmed]
+**Age:** 15
 
-**School:** [school name], [city], India
+**Affiliation:** Independent Researcher
 
 **Photograph:** [author photograph to be supplied]
 

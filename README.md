@@ -48,7 +48,7 @@ The dataset is **not committed** to this repository because it is large and publ
 - **Title:** Evaluating Machine Learning-Based Intrusion Detection Models Under Distribution Shift
 - **Author:** Dhansika.R (Independent Researcher)
 - **Format:** formatted to the *Young Scientists Journal* Author Guide: UK English, no first person or contractions, abbreviations defined, numbered Chicago citations in superscript brackets, and the required section order (Abstract, Introduction, Literature Review, Method, Results, Discussion and Analysis, Conclusion, Funding Statement and Acknowledgements, References, Biography).
-- **Biography:** the paper's Biography section contains three placeholders that must be completed before submission: the author's age, school name and location, and author photograph. The 200 to 600 character third-person biography text is already written.
+- **Biography:** the Biography section lists Dhansika.R as a 15-year-old independent researcher, followed by the 200 to 600 character third-person biography. An author photograph is still to be supplied; the YSJ Author Guide lists a photo as part of the Biography, so the PDF currently carries a placeholder.
 - **AI assistance disclosure:** Generative AI / AI-assisted tools (including the tool *opencode*) were used as guided assistance for scripting, figure generation, and prose editing; the author made all high-level experimental design decisions and reviewed/validated every reported result. Full disclosure is in the manuscript's Funding Statement and Acknowledgements section.
 
 ## License
