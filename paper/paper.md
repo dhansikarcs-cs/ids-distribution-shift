@@ -5,8 +5,7 @@
 **Author:** Dhansika.R  
 **Affiliation:** Independent Researcher  
 **Date:** September 2026  
-**Correspondence:** dhansika.r.cs@gmail.com  
-**Submission note:** Prepared for submission to the *Young Scientists Journal*. This manuscript has not been published elsewhere.
+**Correspondence:** dhansika.r.cs@gmail.com
 
 ---
 
