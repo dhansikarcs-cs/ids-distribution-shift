@@ -14,10 +14,10 @@ from reportlab.platypus import (
     TableStyle, Image, ListFlowable, ListItem, KeepTogether, HRFlowable,
 )
 
-BASE = r'C:\Users\dhans\Desktop\research\tech'
-MD_PATH = os.path.join(BASE, 'paper.md')
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MD_PATH = os.path.join(BASE, 'paper', 'paper.md')
 RES = os.path.join(BASE, 'results')
-OUT_PATH = os.path.join(BASE, 'paper.pdf')
+OUT_PATH = os.path.join(BASE, 'paper', 'paper.pdf')
 
 # Figure number -> result image file (order of appearance == numbering)
 FIGURE_IMAGES = {
@@ -79,6 +79,7 @@ def inline(text):
     text = text.replace('---', '&#8212;')
     text = text.replace('--', '&#8211;')
     text = re.sub(r'([0-9])\s*[xX]\s*([0-9])', r'\1x\2', text)
+    text = re.sub(r'\[(\d+(?:\s*,\s*\d+)*)\]', r'<super>[\1]</super>', text)
     return TOKEN_RE.sub(repl, text)
 
 def is_caption(par):
@@ -181,7 +182,7 @@ while i < len(lines) and lines[i].strip() == '':
 if lines[i].startswith('# '):
     story.append(Paragraph(inline(lines[i][2:].strip()), st_title))
     i += 1
-if i < len(lines) and lines[i].strip() == '---':
+while i < len(lines) and lines[i].strip() in ('', '---'):
     i += 1
 while i < len(lines) and lines[i].strip() != '' and not lines[i].startswith('#'):
     line = lines[i].strip()
