@@ -1,4 +1,4 @@
-"""Render paper.md into a journal-style one-column PDF (peer-review / preprint format)."""
+"""Render paper.md into a one-column PDF for review and reading."""
 
 import os
 import re
@@ -67,7 +67,7 @@ st_kw = ParagraphStyle('kw', fontName=BODY_FONT, fontSize=9.5, leading=12.5, spa
 # ---------------------------------------------------------------- inline text
 TOKEN_RE = re.compile(r'(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)')
 
-def inline(text):
+def inline(text, citations=True):
     def repl(m):
         t = m.group(0)
         if t.startswith('**'):
@@ -79,7 +79,8 @@ def inline(text):
     text = text.replace('---', '&#8212;')
     text = text.replace('--', '&#8211;')
     text = re.sub(r'([0-9])\s*[xX]\s*([0-9])', r'\1x\2', text)
-    text = re.sub(r'\[(\d+(?:\s*,\s*\d+)*)\]', r'<super>[\1]</super>', text)
+    if citations:
+        text = re.sub(r'\[(\d+(?:\s*,\s*\d+)*)\]', r'<super>[\1]</super>', text)
     return TOKEN_RE.sub(repl, text)
 
 def is_caption(par):
@@ -144,7 +145,7 @@ def render_caption(text):
     label = '%s %s:' % (m.group(1), m.group(2))
     rest = m.group(3)
     style = st_caption
-    p = Paragraph('<b><i>%s</i></b>%s' % (label, inline(rest)), style)
+    p = Paragraph('<i><b>%s</b>%s</i>' % (label, inline(rest)), style)
     return p
 
 # ---------------------------------------------------------------- doc
@@ -174,6 +175,7 @@ lines = open(MD_PATH, 'r', encoding='utf-8').read().split('\n')
 
 story = []
 i = 0
+in_references = False
 _pending = []          # items awaiting a table caption (table + its caption stay together)
 
 # ---- title block
@@ -217,6 +219,7 @@ while i < len(lines):
     if line.startswith('## ') or line.startswith('### '):
         level = '##' if line.startswith('##') else '###'
         text = line.strip().lstrip('#').strip()
+        in_references = text.strip().lower() == 'references'
         other_content(Paragraph(inline(text), st_h1 if level == '##' else st_h2))
         i += 1
         continue
@@ -268,7 +271,7 @@ while i < len(lines):
             and not lines[i].startswith('|') and not is_caption(lines[i].strip()):
         para += ' ' + lines[i].strip()
         i += 1
-    other_content(Paragraph(inline(para), st_body))
+    other_content(Paragraph(inline(para, citations=not in_references), st_body))
 
 story.extend(_pending) if _pending else None
 doc.build(story)

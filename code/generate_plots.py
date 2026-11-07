@@ -16,12 +16,19 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT_DIR = os.path.join(BASE, 'results')
 
 with open(os.path.join(OUT_DIR, 'all_results.json'), 'r') as f:
     all_results = json.load(f)
 
-DATA_PATH = r'C:\Users\dhans\Desktop\research\tech\cicids2017_friday.csv'
+DATA_PATH = os.environ.get(
+    'CICIDS_FRIDAY_CSV', os.path.join(BASE, 'data', 'cicids2017_friday.csv')
+)
+if not os.path.exists(DATA_PATH):
+    fallback = os.path.join(os.path.dirname(BASE), 'tech', 'cicids2017_friday.csv')
+    if os.path.exists(fallback):
+        DATA_PATH = fallback
 df = pd.read_csv(DATA_PATH)
 df.replace([np.inf, -np.inf], np.nan, inplace=True)
 df.dropna(inplace=True)

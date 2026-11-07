@@ -14,7 +14,8 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT_DIR = os.path.join(BASE, 'results')
 
 with open(os.path.join(OUT_DIR, 'all_results.json'), 'r') as f:
     all_results = json.load(f)

@@ -8,12 +8,21 @@ import json
 import os
 from collections import Counter
 
-OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
-DATA_PATH = r'C:\Users\dhans\Desktop\research\tech\cicids2017_friday.csv'
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT_DIR = os.path.join(BASE, 'results')
+DATA_PATH = os.environ.get(
+    'CICIDS_FRIDAY_CSV', os.path.join(BASE, 'data', 'cicids2017_friday.csv')
+)
+if not os.path.exists(DATA_PATH):
+    fallback = os.path.join(os.path.dirname(BASE), 'tech', 'cicids2017_friday.csv')
+    if os.path.exists(fallback):
+        DATA_PATH = fallback
 
 df = pd.read_csv(DATA_PATH)
+raw_rows = len(df)
 df.replace([np.inf, -np.inf], np.nan, inplace=True)
 df.dropna(inplace=True)
+rows_after_nan = len(df)
 
 # Subsample same as experiments
 MAX_ROWS = 50000
@@ -28,7 +37,10 @@ df = pd.concat(sampled_dfs).reset_index(drop=True)
 df['binary_label'] = (df[label_col] != 'BENIGN').astype(int)
 
 drop_cols = [c for c in df.columns if c != label_col and df[c].dtype == 'object']
-feature_cols = [c for c in df.columns if c not in drop_cols and c != label_col]
+feature_cols = [
+    c for c in df.columns
+    if c not in drop_cols and c != label_col and c != 'binary_label'
+]
 
 X = df[feature_cols].values.astype(np.float32)
 y_bin = df['binary_label'].values
@@ -50,8 +62,8 @@ print("\n1. DATASET")
 print(f"   Source: CICIDS2017 Friday subset (HuggingFace mirror: bvsam/cic-ids-2017)")
 print(f"   Parquet files: Friday-WorkingHours-Morning, Friday-WorkingHours-Afternoon-DDos,")
 print(f"                  Friday-WorkingHours-Afternoon-PortScan")
-print(f"   Original rows: 703,245")
-print(f"   After NaN/Inf removal: {len(df):,}")
+print(f"   Original rows: {raw_rows:,}")
+print(f"   After NaN/Inf removal: {rows_after_nan:,}")
 print(f"   After subsampling: {len(df):,} (MAX_ROWS={MAX_ROWS})")
 print(f"   Number of features: {len(feature_cols)}")
 print(f"   All features are numeric network flow features from CICFlowMeter")
@@ -79,7 +91,7 @@ print(f"   Train: {len(X_tr_a):,} | Test: {len(X_te_a):,}")
 print(f"   Train class dist: benign={sum(y_tr_a==0):,}, attack={sum(y_tr_a==1):,}")
 print(f"   Test class dist:  benign={sum(y_te_a==0):,}, attack={sum(y_te_a==1):,}")
 
-# Q5: Temporal split details
+# Q5: Session and attack-family split details
 morning_mask = is_bot.copy()
 afternoon_mask = is_ddos | is_portscan
 benign_idx = np.where(is_benign)[0]
@@ -96,8 +108,8 @@ afternoon_mask_full[afternoon_benign] = True
 X_tr_b, y_tr_b = X[morning_mask], y_bin[morning_mask]
 X_te_b, y_te_b = X[afternoon_mask_full], y_bin[afternoon_mask_full]
 
-print("\n5. EXPERIMENT B: TEMPORAL SPLIT")
-print(f"   Method: Attack-type-based temporal partition (CICIDS2017 timeline)")
+print("\n5. EXPERIMENT B: SESSION AND ATTACK-FAMILY SPLIT")
+print(f"   Method: Attack-type-based partition approximating the Friday sessions")
 print(f"   Train (morning): Bot attacks + 40% Benign = {morning_mask.sum():,}")
 print(f"   Test (afternoon): DDoS + PortScan + 40% Benign = {afternoon_mask_full.sum():,}")
 print(f"   Train class dist: benign={sum(y_tr_b==0):,}, attack={sum(y_tr_b==1):,}")
@@ -116,13 +128,13 @@ print(f"   Scaler fitted on TRAINING data only (fit_transform on train, transfor
 print(f"   NaN/Inf replaced with 0.0 after scaling")
 print(f"   No feature selection performed (all 78 features used)")
 
-# Q7: Why RF/XGB = 0.000 temporal F1
-print("\n7. WHY RF/XGB GET F1=0.000 IN TEMPORAL SPLIT")
+# Q7: Why RF/XGB = 0.000 F1 under the shift
+print("\n7. WHY RF/XGB GET F1=0.000 IN THE SHIFTED SPLIT")
 rf_temp_f1 = results['B_session_shift']['RF']['f1']
 rf_temp_acc = results['B_session_shift']['RF']['accuracy']
 rf_temp_prec = results['B_session_shift']['RF']['precision']
 rf_temp_rec = results['B_session_shift']['RF']['recall']
-print(f"   RF temporal: F1={rf_temp_f1}, Acc={rf_temp_acc:.4f}, P={rf_temp_prec}, R={rf_temp_rec}")
+print(f"   RF shifted: F1={rf_temp_f1}, Acc={rf_temp_acc:.4f}, P={rf_temp_prec}, R={rf_temp_rec}")
 print(f"   This means RF predicted ALL test samples as BENIGN (class 0)")
 print(f"   When a binary classifier predicts all negatives: recall=0, precision=undefined->0, F1=0")
 print(f"   RF trained on Bot+Benign learned features specific to Bot traffic")
@@ -159,7 +171,7 @@ print(f"   FPR = FP / (FP + TN) = false alarm rate on benign traffic")
 # Q10: Train/test sizes
 print("\n10. TRAIN/TEST SIZES")
 print(f"   Exp A (random):     Train={len(X_tr_a):,}  Test={len(X_te_a):,}")
-print(f"   Exp B (temporal):   Train={len(X_tr_b):,}  Test={len(X_te_b):,}")
+print(f"   Exp B (shifted):    Train={len(X_tr_b):,}  Test={len(X_te_b):,}")
 print(f"   Exp D (same as A):  Train={len(X_tr_a):,}  Test={len(X_te_a):,}")
 
 # C experiments
@@ -188,7 +200,7 @@ print(f"   Friday-only subset (morning + afternoon sessions)")
 print("\n12. RANDOM SEEDS")
 print(f"   train_test_split: random_state=42 (Experiments A, D)")
 print(f"   Subsampling: random_state=42")
-print(f"   Temporal split benign selection: np.random.seed(42)")
+print(f"   Shifted split benign selection: np.random.seed(42)")
 print(f"   Attack-family shift benign selection: np.random.seed(42)")
 print(f"   Feature shift perturbation: np.random.seed(42)")
 print(f"   All models: random_state=42")
@@ -204,8 +216,8 @@ print(f"   All figures are directly reproducible from the frozen JSON + CSV")
 # Q14: Class distribution comparability
 print("\n14. TEST SET CLASS DISTRIBUTION COMPARISON")
 print(f"   Random split test:  benign={sum(y_te_a==0)/len(y_te_a):.1%}, attack={sum(y_te_a==1)/len(y_te_a):.1%}")
-print(f"   Temporal split test: benign={sum(y_te_b==0)/len(y_te_b):.1%}, attack={sum(y_te_b==1)/len(y_te_b):.1%}")
-print(f"   NOTE: Temporal test has different class distribution - this is EXPECTED")
+print(f"   Shifted split test: benign={sum(y_te_b==0)/len(y_te_b):.1%}, attack={sum(y_te_b==1)/len(y_te_b):.1%}")
+print(f"   NOTE: The shifted test set has a different class distribution - this is EXPECTED")
 print(f"   and part of what makes it a harder/more realistic evaluation.")
 
 # Q15: Attack-family shift test distributions

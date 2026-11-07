@@ -1,7 +1,11 @@
 import pandas as pd
 import os
 
-cache_dir = r'C:\Users\dhans\.cache\huggingface\hub\datasets--bvsam--cic-ids-2017'
+cache_dir = os.environ.get(
+    'HF_CICIDS_CACHE',
+    os.path.join(os.path.expanduser('~'), '.cache', 'huggingface', 'hub',
+                 'datasets--bvsam--cic-ids-2017'),
+)
 
 parquet_files = []
 for root, dirs, files in os.walk(cache_dir):

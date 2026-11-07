@@ -26,11 +26,11 @@ The project was carried out from **July 2026 to September 2026**. The manuscript
 
 ## Reproducibility
 
-1. **Dataset:** download the CICIDS2017 dataset (see `data/README.md`) and place the Friday (PHI) flow records as `cicids2017_friday.csv` next to the scripts.
+1. **Dataset:** download the CICIDS2017 dataset (see `data/README.md`) and place the Friday flow records at `data/cicids2017_friday.csv`, or point the `CICIDS_FRIDAY_CSV` environment variable at the file.
 2. **Install:** `pip install numpy pandas scikit-learn xgboost matplotlib`
 3. **Run experiments:** `python code/experiments_v3.py` (Experiment B4, threshold sweep, Wasserstein distances) and `python code/experiments_v4.py` (fine threshold sweep).
 4. **Generate figures:** `python code/generate_plots_v3.py` and `python code/generate_plots_final.py`.
-5. **Verify every reported number:** `python code/verify_numbers.py` (155 checks against the experiment logs) and `python code/verify_methodology.py`.
+5. **Verify every reported number:** `python code/verify_numbers.py` (275 checks against the experiment logs) and `python code/verify_methodology.py`.
 6. **Build the paper PDF:** `python code/make_pdf.py`; **build the arXiv LaTeX bundle:** `python code/build_arxiv.py`.
 
 All models use fixed hyperparameters with `random_state=42` for reproducibility.

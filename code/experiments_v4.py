@@ -26,8 +26,15 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import roc_auc_score
 from xgboost import XGBClassifier
 
-OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
-DATA_PATH = r'C:\Users\dhans\Desktop\research\tech\cicids2017_friday.csv'
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT_DIR = os.path.join(BASE, 'results')
+DATA_PATH = os.environ.get(
+    'CICIDS_FRIDAY_CSV', os.path.join(BASE, 'data', 'cicids2017_friday.csv')
+)
+if not os.path.exists(DATA_PATH):
+    fallback = os.path.join(os.path.dirname(BASE), 'tech', 'cicids2017_friday.csv')
+    if os.path.exists(fallback):
+        DATA_PATH = fallback
 
 df = pd.read_csv(DATA_PATH)
 label_col = 'Label'
@@ -87,7 +94,8 @@ def get_models():
 y_true = y_te_b
 n_pos = (y_true == 1).sum()
 n_neg = (y_true == 0).sum()
-thresholds = np.load('thresholds.npz')['t'] if os.path.exists('thresholds.npz') else np.arange(0.0, 1.00001, 0.001)
+thresholds_path = os.path.join(BASE, 'thresholds.npz')
+thresholds = np.load(thresholds_path)['t'] if os.path.exists(thresholds_path) else np.arange(0.0, 1.00001, 0.001)
 
 out = {}
 for name, model in get_models().items():
@@ -114,7 +122,11 @@ for name, model in get_models().items():
     f1 = 2 * precision * recall / np.maximum(precision + recall, 1e-12)
     frac_pred = idx / len(ys)
 
-    best_i = int(np.argmax(f1))
+    # Threshold 0.0 predicts every flow as attack, which is degenerate on this
+    # 96.1%-attack test set. Report the best operating point in the range that
+    # the paper actually uses: 0.001 <= t < 0.50.
+    valid = np.where((thresholds >= 0.001) & (thresholds < 0.50))[0]
+    best_i = int(valid[np.argmax(f1[valid])])
     default_i = int(np.argmin(np.abs(thresholds - 0.5)))
 
     out[name] = {
@@ -135,7 +147,7 @@ for name, model in get_models().items():
     print(f"  {name}: AUC={auc:.4f} default F1={out[name]['default_f1']:.4f} "
           f"FPR={out[name]['default_fpr']:.4f} | best F1={out[name]['best_f1']:.4f} "
           f"@t={out[name]['best_threshold']:.3f} FPR={out[name]['best_fpr']:.4f} "
-          f"recall={out[name]['best_recall']:.3f} préc={out[name]['best_precision']:.3f} "
+          f"recall={out[name]['best_recall']:.3f} prec={out[name]['best_precision']:.3f} "
           f"frac_pred={out[name]['best_frac_pred']:.3f}")
 
 with open(os.path.join(OUT_DIR, 'threshold_sweep_curve.json'), 'w') as f:

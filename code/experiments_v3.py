@@ -45,8 +45,15 @@ except ImportError:
         qb = np.quantile(b, q, method='linear')
         return float(np.mean(np.abs(qa - qb)))
 
-OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
-DATA_PATH = r'C:\Users\dhans\Desktop\research\tech\cicids2017_friday.csv'
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT_DIR = os.path.join(BASE, 'results')
+DATA_PATH = os.environ.get(
+    'CICIDS_FRIDAY_CSV', os.path.join(BASE, 'data', 'cicids2017_friday.csv')
+)
+if not os.path.exists(DATA_PATH):
+    fallback = os.path.join(os.path.dirname(BASE), 'tech', 'cicids2017_friday.csv')
+    if os.path.exists(fallback):
+        DATA_PATH = fallback
 # NOTE: ~90 min for a full run; the committed JSON already matches this file.
 # re-run only if you changed something, and read the JSON otherwise.
 
@@ -189,11 +196,12 @@ for name, model in get_models().items():
     }
     print(f"  {name}: F1={b4a[name]['f1']:.4f} AUC={b4a[name]['roc_auc']:.4f}")
 
-# B4b: covariate shift - same attack type, features perturbed on test DDoS
+# B4b: covariate shift - same attack type, features perturbed on the test set
 np.random.seed(42)
 X_te_b4_shift = X_te_b4.copy()
-# here I perturb the test DDoS: 2-5x longer flows, ~1.5x more packets.
-# train stays untouched, so it's ONLY the feature distribution that moves.
+# every held-out flow is perturbed (DDoS and benign alike): 2-5x longer
+# flows and ~1.5x more packets. training stays untouched, so only the
+# feature distribution of the test set moves.
 dur_col = feature_cols.index('Flow Duration') if 'Flow Duration' in feature_cols else 1
 shift_factors = np.random.uniform(2.0, 5.0, size=len(X_te_b4_shift))
 X_te_b4_shift[:, dur_col] = X_te_b4_shift[:, dur_col] * shift_factors
@@ -306,7 +314,9 @@ print("  top shifted features:", [(n, round(v, 2)) for n, v in top_d])
 
 # B4 shift: B4 test unshifted vs B4 test shifted
 w_b4 = wasserstein_profile(X_te_b4, X_te_b4_shift, rng_seed=42)
+top_b4 = top_shifted_features(X_te_b4, X_te_b4_shift, k=5)
 print(f"B4 shift: mean W1/norm = {w_b4['mean_w1_normalized']:.3f}")
+print("  top shifted features:", [(n, round(v, 2)) for n, v in top_b4])
 
 # ============================================================
 # 4. SAVE
@@ -321,7 +331,7 @@ supp = {
     'wasserstein': {
         'B_session_shift': {**w_b, 'top_features': top_b},
         'D_feature_shift': {**w_d, 'top_features': top_d},
-        'B4_covariate_shift': {**w_b4},
+        'B4_covariate_shift': {**w_b4, 'top_features': top_b4},
     },
 }
 

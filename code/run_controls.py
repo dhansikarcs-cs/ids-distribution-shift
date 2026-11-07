@@ -2,9 +2,9 @@
 Additional experiments to fix the train-size confound.
 
 Experiment B2 (Matched-Size Control):
-  - Train on 13K RANDOM samples from the full dataset
-  - Test on the SAME temporal test set (DDoS + PortScan + Benign = 298K)
-  - Purpose: Isolate whether RF/XGB collapse is due to distribution shift or small train size
+  - Train on 13,736 samples from Experiment A's training pool
+  - Test on Experiment A's held-out 20% split
+  - Purpose: Isolate distribution shift from small training-set size
 
 Experiment B3 (Same-Distribution + Same-Size):
   - Train on 13K RANDOM samples
@@ -43,8 +43,15 @@ from sklearn.metrics import (
 )
 from xgboost import XGBClassifier
 
-OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
-DATA_PATH = r'C:\Users\dhans\Desktop\research\tech\cicids2017_friday.csv'
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT_DIR = os.path.join(BASE, 'results')
+DATA_PATH = os.environ.get(
+    'CICIDS_FRIDAY_CSV', os.path.join(BASE, 'data', 'cicids2017_friday.csv')
+)
+if not os.path.exists(DATA_PATH):
+    fallback = os.path.join(os.path.dirname(BASE), 'tech', 'cicids2017_friday.csv')
+    if os.path.exists(fallback):
+        DATA_PATH = fallback
 
 # ============ Load and prepare data (same as experiments.py) ============
 df = pd.read_csv(DATA_PATH)
@@ -161,25 +168,28 @@ def run_single(model_name, model, X_train, X_test, y_train, y_test):
 
 # ============================================================
 # B2: Matched-Size Control
-# Train on n_temporal_train RANDOM samples, test on temporal test set
+# Train on 13,736 samples from Experiment A's training pool,
+# test on Experiment A's held-out 20% split.
 # ============================================================
 print("\n" + "=" * 70)
-print("EXPERIMENT B2: MATCHED-SIZE CONTROL (small random train -> temporal test)")
+print("EXPERIMENT B2: MATCHED-SIZE CONTROL (small same-distribution train)")
 print("=" * 70)
+
+X_tr_a, X_te_a, y_tr_a, y_te_a = train_test_split(
+    X, y_bin, test_size=0.2, random_state=42, stratify=y_bin
+)
 
 results_b2 = {}
 for model_name in ['LR', 'RF', 'XGB', 'MLP']:
-    # Use same random_state for the subsample but different from temporal
-    np.random.seed(123)  # Different seed from temporal
-    all_indices = np.arange(len(X))
-    train_indices = np.random.choice(all_indices, size=n_temporal_train, replace=False)
+    np.random.seed(123)
+    train_indices = np.random.choice(len(X_tr_a), size=n_temporal_train, replace=False)
 
-    X_train_b2 = X[train_indices]
-    y_train_b2 = y_bin[train_indices]
+    X_train_b2 = X_tr_a[train_indices]
+    y_train_b2 = y_tr_a[train_indices]
 
-    print(f"\n  {model_name}: train={len(X_train_b2):,} (random), test={len(X_te_temporal):,} (temporal)")
+    print(f"\n  {model_name}: train={len(X_train_b2):,} (same dist), test={len(X_te_a):,} (same dist)")
     model = get_models()[model_name]
-    metrics = run_single(model_name, model, X_train_b2, X_te_temporal, y_train_b2, y_te_temporal)
+    metrics = run_single(model_name, model, X_train_b2, X_te_a, y_train_b2, y_te_a)
     results_b2[model_name] = metrics
     print(f"    F1={metrics['f1']:.4f} Acc={metrics['accuracy']:.4f} P={metrics['precision']:.4f} R={metrics['recall']:.4f} ROC-AUC={metrics.get('roc_auc', 0):.4f}")
 

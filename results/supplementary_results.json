@@ -150,7 +150,29 @@
     "B4_covariate_shift": {
       "mean_w1_normalized": 0.15162537970973622,
       "median_w1_normalized": 0.009695033505886727,
-      "n_features": 68
+      "n_features": 68,
+      "top_features": [
+        [
+          "Packet Length Variance",
+          0.943458512227912
+        ],
+        [
+          "Flow IAT Std",
+          0.7070056032324695
+        ],
+        [
+          "Flow Duration",
+          0.7055366727588083
+        ],
+        [
+          "Fwd IAT Total",
+          0.6926263936186263
+        ],
+        [
+          "Flow IAT Max",
+          0.6904651230118289
+        ]
+      ]
     }
   }
 }

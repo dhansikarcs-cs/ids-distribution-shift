@@ -31,12 +31,19 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-OUT_DIR = r'C:\Users\dhans\Desktop\research\tech\results'
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT_DIR = os.path.join(BASE, 'results')
 os.makedirs(OUT_DIR, exist_ok=True)
 
-DATA_PATH = r'C:\Users\dhans\Desktop\research\tech\cicids2017_friday.csv'
-# path was wrong for days - my first draft pointed at the raw download and
-# every number came out off. USE the cleaned sheet from save_data.py only.
+DATA_PATH = os.environ.get(
+    'CICIDS_FRIDAY_CSV', os.path.join(BASE, 'data', 'cicids2017_friday.csv')
+)
+if not os.path.exists(DATA_PATH):
+    fallback = os.path.join(os.path.dirname(BASE), 'tech', 'cicids2017_friday.csv')
+    if os.path.exists(fallback):
+        DATA_PATH = fallback
+# use the cleaned sheet from save_data.py, not the raw download: the raw file
+# still carries the object columns and every metric comes out slightly off.
 
 # ============================================================
 # 1. DATA LOADING & PREPROCESSING

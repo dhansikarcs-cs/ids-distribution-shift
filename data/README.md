@@ -18,10 +18,11 @@ classes used in the manuscript.
 - The raw dataset is several gigabytes and exceeds repository size limits.
 - It is a public, third-party dataset under its own terms of use.
 
-Place the merged Friday flow records as `cicids2017_friday.csv` in the project
-root (next to `code/`) before running the scripts.
+Place the merged Friday flow records at `data/cicids2017_friday.csv` before
+running the scripts, or set the `CICIDS_FRIDAY_CSV` environment variable to the
+file's location.
 
-## Preprocessing performed (mirrors the manuscript, Section 5.1)
+## Preprocessing performed (mirrors the manuscript, Section 3.1)
 
 1. Replace infinite values with NaN.
 2. Drop rows containing NaN/Inf: 527 rows (0.07% of the raw 703,245) removed;

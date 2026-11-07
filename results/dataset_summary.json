@@ -1,0 +1,33 @@
+{
+  "raw_rows": 703245,
+  "rows_after_nan_drop": 702718,
+  "rows_dropped": 527,
+  "raw_class_counts": {
+    "BENIGN": 413933,
+    "Bot": 1956,
+    "DDoS": 128025,
+    "PortScan": 158804
+  },
+  "processed_class_counts": {
+    "BENIGN": 29452,
+    "Bot": 1956,
+    "DDoS": 128025,
+    "PortScan": 158804
+  },
+  "processed_rows": 318237,
+  "processed_attack_rows": 288785,
+  "n_features": 78,
+  "n_features_with_nonzero_pooled_std": 68,
+  "benign_downsample_seed": 42,
+  "experiment_b_train_rows": 13736,
+  "experiment_b_test_rows": 298609,
+  "experiment_b_train_benign": 11780,
+  "experiment_b_test_benign": 11780,
+  "b2_train_attack": 12471,
+  "b2_train_benign": 1265,
+  "b4_pool": 157477,
+  "b4_train": 125981,
+  "b4_test": 31496,
+  "b4_test_benign": 5891,
+  "b4_test_ddos": 25605
+}
