@@ -470,6 +470,4 @@ These findings have implications for both research methodology and operational d
 
 **Affiliation:** Independent Researcher
 
-**Photograph:** [author photograph to be supplied]
-
 Dhansika.R is an independent researcher with an interest in cybersecurity, cloud computing, and applied artificial intelligence. Her research examines how distribution shift affects machine learning-based intrusion detection, and she maintains the public code and verification scripts for her study. She is also interested in psychology and in making technical work reproducible and honest.
